@@ -1,0 +1,52 @@
+/* begin: form control */
+function selectSomeWbSection(){
+  var thisform = document.adv_search_backend;
+  with (thisform){
+    var all_unchecked = 1;
+    for (var i = 0; i < wb_section_v.length; i++){
+      if (wb_section_v[i].checked){
+        all_unchecked = 0;
+      }
+    }
+    wb_all.checked =0; 
+    if (all_unchecked){
+      wb_this.checked = 1;
+      wb_section.checked = 0;
+    }else{
+      wb_this.checked = 0;
+      wb_section.checked = 1;
+    }
+  }
+}
+function selectLgaAny(){
+  var thisform = document.adv_search_backend;
+  with (thisform){
+    lga_en.checked = 0;
+    lga_ch.checked = 0;
+    lga_other.checked = 0;
+  }
+}
+function selectLgaSome(){
+  var thisform = document.adv_search_backend;
+  with (thisform){
+    lga_other.checked = (lga_en.checked || lga_ch.checked);
+    lga_any.checked = !lga_other.checked;
+  }
+}
+function selectDateWithin(){
+  var thisform = document.adv_search_backend;
+  with (thisform){
+    date_any.checked = 0;
+    date_fromto.checked = 0;
+    date_within.checked = 1;
+  }
+}
+function selectDateFromto(){
+  var thisform = document.adv_search_backend;
+  with (thisform){
+    date_any.checked = 0;
+    date_within.checked = 0;
+    date_fromto.checked = 1;
+  }
+}
+/* end: form control */

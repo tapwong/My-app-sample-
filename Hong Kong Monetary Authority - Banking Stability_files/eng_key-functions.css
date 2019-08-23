@@ -1,0 +1,52 @@
+@charset "utf-8";
+/* CSS Document */
+
+h1 {color:#186F85;}
+/* Left Navigation starts */
+#leftNav {border-color:#186F85;}
+#leftNav h2 {color:#186F85;}
+#leftNav h2 span {color:#186F85;}
+#leftNav dl dd a {background-color:#186F85;}
+#leftNav dl dd a:hover, #leftNav dl dd a.active {background-color:#4B9EB3;}
+#leftNav dl dd dl dd a, #leftNav dl dd dl dd a.active {color:#186F85;}
+#leftNav dl dd dl dd a:hover, #leftNav dl dd dl dd a.active {background-image:url(/eng/img/policy-areas/pt_leftnav.gif); background-color:#D3E8EC;}
+#leftNav dl dd dl dd dl {background-color:#E8F3F5;}
+#leftNav dl dd dl dd dl dd a.active, #leftNav dl dd dl dd dl dd a.active:hover {background-image:url(/eng/img/policy-areas/stroke_leftnav.gif);}
+/* Left Navigation ends */
+
+/* Main starts */
+#main #content a {color:#186F85;}
+/* Main ends */
+
+/* Share styles start */
+#main #content ul.bulletList{margin-bottom:15px;}
+#main #content ul.bulletList li {background-image:url(/eng/img/key-functions/pt.gif);}
+#main #content ul.bulletList li ul li {background-image:url(/eng/img/policy-areas/pt_sub.gif);}
+#main #content ol.fixExtraMargin{ *margin-top:-15px;}
+#main #content table.documentTable {border-top-color:#114F5E;}
+#main #content table.colorTable {border-bottom-color:#114F5E;}
+#main #content table.colorTable tr th {border-top-color:#114F5E; background-image:url(/eng/img/policy-areas/dash.gif);}
+#main #content table.colorTable tr.color td, #main #content table.colorTable tr td.color {background-color:#ECF1F2;}
+#main #content table.colorTable tr.subheader th {background-color:#CAD7DB;}
+#main #content table.noTh{border-color:#114F5E;}
+
+#main #content dl.ourRef {margin:0 0 15px 0;}
+#main #content dl.ourRef dt {float:left; width:6em;}
+#main #content dl.ourRef dd {margin:0 0 0 6em;}
+/* Share styles end */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* EDITOR PROPERTIES - PLEASE DON'T DELETE THIS LINE TO AVOID DUPLICATE PROPERTIES */

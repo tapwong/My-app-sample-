@@ -1,0 +1,241 @@
+/* begin: init functions*/
+function initFaq(){
+  var ui_lang = getURLParam("ui_lang");
+  if (ui_lang!="zh-hk" && ui_lang!="zh-cn" && ui_lang!='en'){
+      ui_lang="zh-hk";
+  }
+  if (ui_lang == "zh-cn"){
+    var v = ["topNavLogo", "topNavLeft", "topNavRight1", "topNavRight2",
+              "topNavBrand", "deptNavMenu"];
+    var tc = new Array();
+    var sc = new Array();
+    for (var i = 0; i < v.length; i++){
+      tc[i] = document.getElementById(v[i]+"TcBlock");
+      sc[i] = document.getElementById(v[i]+"ScBlock");
+      tc[i].setAttribute("class", "hide");
+      tc[i].setAttribute("className", "hide");
+      sc[i].setAttribute("class", "show");
+      sc[i].setAttribute("className", "show");
+    }
+  }
+}
+
+function initUILang(){
+  var outForm = document.adv_search;
+  with(outForm){
+    if (ui_lang.value == "en"){
+      return ;
+    }
+    ui_lang.value = getURLParam("ui_lang");
+    if (ui_lang.value!="zh-hk" && ui_lang.value!="zh-cn" && ui_lang.value!="en"){
+      ui_lang.value="zh-hk";
+    }
+    /*
+      when url contains http://sc.info.gov.hk/TuniS/
+      ui_lang should be regarded as "zh-cn"
+    */
+    if (window.location.href.match("http://sc.info.gov.hk/TuniS/")){
+      ui_lang.value="zh-cn";
+    }
+    if (ui_lang.value == "zh-cn"){
+      var v = ["topNavLogo", "topNavLeft", "topNavRight1", "topNavRight2",
+                "topNavBrand", "searchBtnTop", "searchBtnBtm", "faqLink"];
+      var tc = new Array();
+      var sc = new Array();
+      for (var i = 0; i < v.length; i++){
+        tc[i] = document.getElementById(v[i]+"TcBlock");
+        sc[i] = document.getElementById(v[i]+"ScBlock");
+        tc[i].setAttribute("class", "hide");
+        tc[i].setAttribute("className", "hide");
+        sc[i].setAttribute("class", "show");
+        sc[i].setAttribute("className", "show");
+      }
+    }
+  }
+}
+function initQuery(thisForm){
+  with(thisForm){
+    query.value = decodeURIComponent(getURLParam("init_query"));
+    exact_q.value = decodeURIComponent(getURLParam("init_exact_q"));
+    any_q.value = decodeURIComponent(getURLParam("init_any_q"));
+    none_q.value = decodeURIComponent(getURLParam("init_none_q"));
+  }
+}
+function initWebsite(thisForm){
+  with (thisForm){
+    var x = decodeURIComponent(getURLParam("gp1"));
+    if (x){
+      var v = new Array();
+      v = x.split(",");
+      wb_all.checked = 1;
+      var rsd_cnt = 0;
+      for (var i = 0; i < v.length; i++){
+        var flag = false;
+        for (var j = 1; j < wb_within_v.length; j++){              
+          if (v[i] == wb_within_v[j].value){
+            wb_within_v[j].checked = 1;
+            wb_within.checked = 1;
+            flag = true;
+            break;
+          }
+        }
+        if (flag){
+          continue;
+        }
+        for (var j = 0; j < wb_within_rsd_v.length; j++){
+          if (v[i] == wb_within_rsd_v[j].value){
+            wb_within_rsd_v[j].checked = 1;
+            wb_within.checked = 1;
+            flag = true;
+            rsd_cnt++;
+            break;
+          }
+        }
+        if (flag){
+          continue;
+        }
+        for (var j = 0; j < wb_dept_list.options.length; j++){
+          if (v[i] == wb_dept_list.options[j].value){
+            wb_dept_list.options[j].selected = 1;
+            wb_spec.checked = 1;
+            break;
+          }
+        }
+      }
+      if (rsd_cnt == wb_within_rsd_v.length){
+        wb_within_v[0].checked = 1;
+      }
+    }
+  }
+}
+function initLang(thisForm){
+  with(thisForm){
+    var x = getURLParam("r_lang");
+    if (x=="en" || x=="ch"){
+      lga_any.checked = 0;
+      lga_other.checked = 1;
+      if (x == "en"){
+        lga_en.checked = 1;
+      }
+      if (x == "ch"){
+        lga_ch.checked = 1;
+      }
+    }
+  }
+}
+function initDate(thisForm){
+  with(thisForm){
+    var x = decodeURIComponent(getURLParam("last_mod"));
+    if (x){
+      if (x.charAt(0) == '#'){
+        if (x.charAt(1) == '-'){
+          date_any.checked = 1;
+        }else{
+          date_within.checked = 1;
+          for (var i = 0; i < date_last.options.length; i++){
+            if (x == date_last.options[i].value){
+              date_last.options[i].selected = 1;
+              break;
+            }
+          }
+        }
+      }else{
+        date_fromto.checked = 1;
+        var y = "";
+        /* start date year */
+        y = x.substr(0, 4);
+        for (var i = 1; i < s_date_year.options.length; i++){
+          if (y == s_date_year.options[i].value){
+            s_date_year.options[i].selected = 1;
+            break;
+          }
+        }
+        /* start date month */
+        y = x.substr(4, 2);
+        for (var i = 1; i < s_date_month.options.length; i++){
+          if (y == s_date_month.options[i].value){
+            s_date_month.options[i].selected = 1;
+            break;
+          }
+        }
+        /* start date day */
+        y =  x.substr(6, 2);
+        for (var i = 1; i < s_date_day.options.length; i++){
+          if (y == s_date_day.options[i].value){
+            s_date_day.options[i].selected = 1;
+            break;
+          }
+        }
+        /* end date year */
+        y = x.substr(9, 4);
+        for (var i = 1; i < e_date_year.options.length; i++){
+          if (y == e_date_year.options[i].value){
+            e_date_year.options[i].selected = 1;
+            break;
+          }
+        }
+        /* end date month */
+        y = x.substr(13, 2);
+        for (var i = 1; i < e_date_month.options.length; i++){
+          if (y == e_date_month.options[i].value){
+            e_date_month.options[i].selected = 1;
+            break;
+          }
+        }
+        /* start date day */
+        y =  x.substr(15, 2);
+        for (var i = 1; i < e_date_day.options.length; i++){
+          if (y == e_date_day.options[i].value){
+            e_date_day.options[i].selected = 1;
+            break;
+          }
+        }
+      }
+    }
+  }
+}
+function initFileFormat(thisForm){
+  with(thisForm){
+    var x = getURLParam("doc_type");
+    if (x){
+      for (var i = 0; i < file_type.options.length; i++){                  			
+        if (x == file_type.options[i].value){
+          file_type.options[i].selected = 1;
+          break;
+        }
+      }
+    }
+  }
+}
+function initDisplay(thisForm){
+  with(thisForm){
+    x = getURLParam("p_size");
+    if (x){
+      for (var i = 0; i < page_size.options.length; i++){
+        if (x == page_size.options[i].value){
+          page_size.options[i].selected = 1;
+          break;
+        }
+      }
+    }
+  }
+}
+function initForm(){
+  var frontForm = document.adv_search;
+  initQuery(frontForm);
+  var backForm = document.adv_search_backend;
+  initFileFormat(backForm);
+  initWebsite(backForm);
+  initLang(backForm);
+  initDate(backForm);
+  initDisplay(backForm);
+}
+
+/* Customized: Change init() -> initGov() */
+function initGov(){
+  initUILang();
+  if (getURLParam("is_init") == "true"){
+    initForm();
+  }
+}
+/* end: init */

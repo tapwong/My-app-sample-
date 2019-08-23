@@ -1,0 +1,172 @@
+﻿/* begin: validate form */
+function isQueryValid(thisForm){
+  with(thisForm){
+    if (!(query.value || exact_q.value || any_q.value)){
+      return 0;
+    }
+  }
+  return 1;
+}
+
+function isQueryLegal(thisForm){
+  var illegalChars = /[~!#\$%\^&*\[\]<>\"\r\n]/g;
+  with(thisForm){
+    if (illegalChars.test(query.value) || illegalChars.test(exact_q.value) || illegalChars.test(any_q.value) || illegalChars.test(none_q.value)){
+      return 0;
+    }
+  }
+  return 1;
+}
+
+function isLeapYear(year){
+  if (year%4){ return 0; }
+  if (!(year%100) && year%400){ return 0; }
+  return 1;
+}
+function isDateValid(thisForm){
+  with(thisForm){
+    if (date_fromto.checked){
+      days = [[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31], [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]];
+      var month, year, isLeap, maxDays;
+
+      month = s_date_month.options[s_date_month.selectedIndex].value;
+      year = s_date_year.options[s_date_year.selectedIndex].value;
+      isLeap = isLeapYear(parseInt(year));
+      maxDays = days[isLeap][parseInt(month)-1];
+      while (parseInt(s_date_day.options[s_date_day.selectedIndex].value) > maxDays){
+        s_date_day.options[s_date_day.selectedIndex-1].selected = 1;
+      }
+      var s_date = year+month+s_date_day.options[s_date_day.selectedIndex].value;
+      
+      month = e_date_month.options[e_date_month.selectedIndex].value;
+      year = e_date_year.options[e_date_year.selectedIndex].value;
+      isLeap = isLeapYear(parseInt(year));
+      maxDays = days[isLeap][parseInt(month)-1];
+      if (parseInt(e_date_day.options[e_date_day.selectedIndex].value) > maxDays){
+        e_date_day.options[maxDays].selected = 1;
+      }
+      var e_date = year+month+e_date_day.options[e_date_day.selectedIndex].value;
+      
+      if (s_date > e_date){
+        return 0;
+      }
+    }
+  }
+  return 1;
+}
+function validateForm(){
+  var flag = 1;
+  var frontForm = document.adv_search;  
+  var lang = 0;
+  if (frontForm.ui_lang.value == "en") lang = 0;
+  if (frontForm.ui_lang.value == "zh-hk") lang = 1;
+  if (frontForm.ui_lang.value == "zh-cn") lang = 2;
+
+  /* avoid null query */
+  if (!isQueryValid(frontForm)){ alert(alertMsg[0][lang]); flag = 0;}
+  /* avoid illegal query */
+  if (!isQueryLegal(frontForm)){ alert(alertMsg[2][lang]); flag = 0;}
+  var backForm = document.adv_search_backend;
+  /* avoid start date > end date */
+  if (!isDateValid(backForm)){ alert(alertMsg[1][lang]); flag = 0;}
+
+  return flag;
+}
+/* end:validate form */
+
+/* begin: submit form */
+function trimForm(){
+
+  var frontForm = document.adv_search;
+
+  with (frontForm){
+    /* query related data */
+    init_query.value = encodeURIComponent(query.value);
+    init_exact_q.value = encodeURIComponent(exact_q.value);
+    init_any_q.value = encodeURIComponent(any_q.value);
+    init_none_q.value = encodeURIComponent(none_q.value);
+
+    var backForm = document.adv_search_backend;
+    with (backForm){
+      
+      /* doc type related data */
+      doc_type.value = file_type.value;
+      /* display related data */
+      p_size.value = page_size.value;
+
+      /* trim date related data */
+      if (date_any.checked){
+        /* any time */
+        last_mod.value=date_any.value;
+      }else{
+        if (date_within.checked){
+          /* within the past */
+          last_mod.value = date_last.options[date_last.selectedIndex].value;
+        }else{
+          /* from to */
+          if (date_fromto.checked){
+            last_mod.value = 
+              s_date_year.options[s_date_year.selectedIndex].value +
+              s_date_month.options[s_date_month.selectedIndex].value +
+              s_date_day.options[s_date_day.selectedIndex].value +
+              "," +
+              e_date_year.options[e_date_year.selectedIndex].value +
+              e_date_month.options[e_date_month.selectedIndex].value +
+              e_date_day.options[e_date_day.selectedIndex].value;
+          }
+        }
+      }
+
+      /* trim language related data */
+      if (lga_any.checked){
+        /* any language */
+        r_lang.value = lga_any.value;
+      }else{
+       /* if (lga_other.checked){*/
+          if (lga_en.checked && lga_ch.checked){
+            r_lang.value = lga_any.value;
+          }else{
+            if (lga_en.checked){
+              r_lang.value = lga_en.value;
+            }
+            if (lga_ch.checked){
+              r_lang.value = lga_ch.value;
+            }
+       /*   }*/
+        }
+      }
+
+      /* trim website related data */
+      var flag = true;
+      if (wb_all.checked){
+        /* all websites */
+        gp1.value = "0";
+        web.value = "all";
+      }else{
+        gp1.value = "";
+        web.value = "this";
+        if (wb_this.checked){
+          /* this website */
+          gp1.value = gp0.value;
+        }else{
+          if (wb_section.checked){
+            /* within some sections */
+            for (var i = 0; i < wb_section_v.length; i++){
+              if (wb_section_v[i].checked){
+                /* select all */
+                if (flag){
+                  flag = !flag;
+                }else{
+                  gp1.value += ",";
+                }
+                gp1.value += wb_section_v[i].value;
+              }
+            }
+          }
+        }
+      } 
+    }
+  }
+  return true;
+}
+/* end: submit form */
